@@ -6,6 +6,7 @@ const Counter = () => {
   // setCount - function to update the variable
   // useState - hook to store the variable
   // useState(0) - state initialized with a value 0
+  // state - triggers re-render of the component on value change
 
   const updateCounter = () => {
     // setCount(count + 1); // 0 + 1
@@ -18,9 +19,15 @@ const Counter = () => {
   return (
     <div>
       <p>Count: {count}</p>
-      <button onClick={() => setCount(count + 1)}>Increment</button>
-      <button onClick={() => setCount(count - 1)}>Decrement</button>
-      // button to increment by 10 // button to reset counter
+      <div className="flex gap-4 justify-center">
+        <button onClick={() => setCount(count + 1)}>Increment</button>
+        <button onClick={() => setCount(count - 1)}>Decrement</button>
+        <button onClick={() => setCount(count + 10)}>Increment by 10</button>
+        {/* display render button only if count is greater than 0 */}
+        {count > 0 && <button onClick={() => setCount(0)}>Reset</button>}
+
+        {/* TODO: limit counter value to 0-100 */}
+      </div>
     </div>
   );
 };
