@@ -1,24 +1,38 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 export default function UserInfo() {
   const [submittedUserInfo, setSubmittedUserInfo] = useState({
-    name: "John Doe",
-    address: "asdada, adsada",
-    phone: "887988798",
+    name: "",
+    address: "",
+    phone: "",
   });
 
-  const handleSubmit = (e: FormEvent) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    setLoading(true);
     e.preventDefault(); // prevents page reload on form submit
-    console.log(e);
-    setSubmittedUserInfo({
-      name: e.target["name"].value,
-      address: e.target["address"].value,
-      phone: e.target["phone"].value,
-    });
-    // const formData = new FormData(e.target)
-    //
-    // API call
+    const formData = new FormData(e.currentTarget);
+    const formValues = JSON.stringify(Object.fromEntries(formData.entries())); // Convert FormData to object
+    setSubmittedUserInfo(JSON.parse(formValues));
+    setLoading(false);
+    // API call with the processed form data
   };
+
+  // to run code automatically based on dependency
+  useEffect(() => {
+    // runs this code once on page mount
+    console.log("page mounted");
+  }, []); // since dependency array is empty
+
+  useEffect(() => {
+    console.log("use effect call");
+    // setSubmittedUserInfo({
+    //   name: "John Doe",
+    //   address: "asdada, adsada",
+    //   phone: "887988798",
+    // });
+  }, [submittedUserInfo]); // runs useEffect every time the value changes
 
   // Events
   // - onChange
@@ -37,11 +51,26 @@ export default function UserInfo() {
       </div>
       <form className="flex flex-col items-start gap-2" onSubmit={handleSubmit}>
         <label htmlFor="name">Name: </label>
-        <input id="name" type="text" className="border px-2 w-full" />
+        <input
+          id="name"
+          name="name"
+          type="text"
+          className="border px-2 w-full border-green-200"
+        />
         <label htmlFor="address">Address: </label>
-        <input id="address" type="text" className="border px-2 w-full" />
+        <input
+          id="address"
+          name="address"
+          type="text"
+          className="border px-2 w-full"
+        />
         <label htmlFor="phone">Phone: </label>
-        <input id="phone" type="text" className="border px-2 w-full" />
+        <input
+          id="phone"
+          name="phone"
+          type="phone"
+          className="border px-2 w-full"
+        />
         <button
           type="submit"
           className="w-full bg-amber-600 text-white py-1 mt-4"
@@ -52,3 +81,8 @@ export default function UserInfo() {
     </div>
   );
 }
+
+// component
+// props
+// local state
+// hooks - useEffect, useState
